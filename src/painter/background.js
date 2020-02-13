@@ -29,7 +29,7 @@ module.exports = function(drawer, width, height, time) {
       acceleration.y = Math.random() * 2;
       velocity.x += acceleration.x;
       velocity.y += acceleration.y;
-      velocity = vector.mult(vector.normalize(velocity), 500);
+      velocity = vector.mult(vector.normalize(velocity), 100);
 
       position.x += velocity.x;
       position.y += velocity.y;
@@ -48,7 +48,7 @@ module.exports = function(drawer, width, height, time) {
         velocity.y *= -1;
       }
       // const drawNew = newDraw
-      if (Math.abs(Date.now() - newDraw) > Math.random() * 100) {
+      if (Math.abs(Date.now() - newDraw) > Math.random() * 50) {
         newDraw = Date.now();
         drawer(position.x, position.y, true);
       } else {

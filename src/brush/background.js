@@ -25,11 +25,11 @@ module.exports = (_ctx, opts) => {
   let colorIndex = 0;
   const voronoi = new Voronoi();
   var diagram;
-  var bbox = { xl: 300, xr: ctx.canvas.width * 0.5, yt: 300, yb: ctx.canvas.height * 0.75 };
+  var bbox = { xl: 650, xr: ctx.canvas.width * 0.75, yt: 300, yb: ctx.canvas.height * 0.75 };
 
   return {
     draw(x, y, reset) {
-      if (!reset) {
+      if (reset) {
         points.push({ x, y, color: colors[colorIndex] });
         colorIndex += 1;
         if (colorIndex >= colors.length) {
