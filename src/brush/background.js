@@ -1,3 +1,5 @@
+var Voronoi = require("voronoi");
+
 module.exports = (_ctx, opts) => {
   const ctx = _ctx;
   let options = {};
@@ -9,34 +11,55 @@ module.exports = (_ctx, opts) => {
     strokeStyle: options.strokeStyle || "black"
   };
 
-  const colors = ['#ec0000', '#ecdf00', '#003dff', '#00c700', '#ff7900','#4cd1ff', '#00fd8c', '#ff9ef3']
-  const points = [[]];
+  const colors = [
+    "#ec0000",
+    "#ecdf00",
+    "#003dff",
+    "#00c700",
+    "#ff7900",
+    "#4cd1ff",
+    "#00fd8c",
+    "#ff9ef3"
+  ];
+  const points = [];
   let colorIndex = 0;
+  const voronoi = new Voronoi();
+  var diagram;
+  var bbox = { xl: 0, xr: ctx.canvas.width, yt: 0, yb: ctx.canvas.height };
 
   return {
     draw(x, y, reset) {
-      ctx.lineWidth = config.lineWidth;
-      ctx.strokeStyle = config.strokeStyle;
-      points[points.length - 1].push({ x, y, color: colors[colorIndex] });
       if (reset) {
-        points.push([])
+        points.push({ x, y, color: colors[colorIndex] });
         colorIndex += 1;
         if (colorIndex >= colors.length) {
           colorIndex = 0;
         }
+        diagram = voronoi.compute(points, bbox);
       }
-      for(let i = 0; i < points.length; i += 1) {
-        ctx.beginPath();
-        if (points[i].length > 0) {
-          ctx.moveTo(points[i][0].x, points[i][0].y);
-        }
-        for(let j = 0; j < points[i].length; j += 1) {
-          ctx.fillStyle =  points[i][j].color;
-          ctx.lineTo( points[i][j].x, points[i][j].y);
-        }
-        ctx.fill();
-        ctx.stroke();
+      if (!diagram) {
+        return
       }
+      ctx.lineWidth = config.lineWidth;
+      for (let i = 0; i < diagram.cells.length; i += 1) {
+        const cell = diagram.cells[i];
+        if (cell.halfedges.length > 0) {
+          ctx.beginPath();
+          var halfedges = cell.halfedges,
+            nHalfedges = halfedges.length,
+            v = halfedges[0].getStartpoint();
+          ctx.moveTo(v.x,v.y);
+          for (var iHalfedge=0; iHalfedge<nHalfedges; iHalfedge++) {
+            v = halfedges[iHalfedge].getEndpoint();
+            ctx.lineTo(v.x,v.y);
+            }
+          ctx.fillStyle = points[i].color;
+          ctx.strokeStyle = '#000';
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+
     },
     drawLine(fromX, fromY, x, y) {
       ctx.beginPath();

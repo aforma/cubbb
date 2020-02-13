@@ -48,7 +48,7 @@ module.exports = function(drawer, width, height, time) {
         velocity.y *= -1;
       }
       // const drawNew = newDraw
-      if (Math.abs(Date.now() - newDraw) > 200 + Math.random() * 300) {
+      if (Math.abs(Date.now() - newDraw) > 200 + Math.random() * 1000) {
         newDraw = Date.now();
         drawer(position.x, position.y, true);
       } else {

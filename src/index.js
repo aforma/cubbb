@@ -16,7 +16,7 @@ window.onload = () => {
   sketch(s => {
     const background = backgroundBrush(s.context, {
       strokeStyle: "#CCCCCC",
-      lineWidth: 1
+      lineWidth: 10
     });
     const background1Painter = bcakgroundPainter(
       background.draw.bind(background),
