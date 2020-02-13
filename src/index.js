@@ -29,7 +29,7 @@ window.onload = () => {
     return {
       resize(params) {},
       render(params) {
-        s.context.fillStyle='#EEEEEE';
+        s.context.fillStyle='#caeeee';
         s.context.beginPath();
         s.context.rect(0, 0, s.width, s.height);
         s.context.fill();
