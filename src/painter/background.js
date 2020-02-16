@@ -21,7 +21,7 @@ module.exports = function(drawer, width, height, time) {
         newDraw = Date.now();
       }
       if (Math.abs(Date.now() - startTime) > time * 3000) {
-        canDraw = false;
+        drawer(position.x, position.y, false);
         this.done = true;
       }
 
@@ -48,7 +48,7 @@ module.exports = function(drawer, width, height, time) {
         velocity.y *= -1;
       }
       // const drawNew = newDraw
-      if (Math.abs(Date.now() - newDraw) > Math.random() * 50) {
+      if (Math.abs(Date.now() - newDraw) > Math.random() * 50 && !this.done) {
         newDraw = Date.now();
         drawer(position.x, position.y, true);
       } else {
