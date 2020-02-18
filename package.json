@@ -6,12 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "canvas-sketch src/index.js --output=./dist/ --html=./dist/index.html",
-    "build": "canvas-sketch src/index.js --build --output=./dist/ --html=./dist/index.html"
+    "build": "canvas-sketch src/index.js --name index --build --inline --dir=./build/"
   },
   "author": "Giulian Drimba",
   "license": "ISC",
   "dependencies": {
     "canvas-sketch": "^0.7.1",
+    "load-asset": "^1.2.0",
     "voronoi": "^1.0.0"
   },
   "devDependencies": {

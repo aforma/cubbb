@@ -1,5 +1,4 @@
 var vector = require("../util/vector");
-var Voronoi = require('voronoi');
 module.exports = function(drawer, width, height, time) {
   var position = {
     x: 0,
@@ -25,11 +24,11 @@ module.exports = function(drawer, width, height, time) {
         this.done = true;
       }
 
-      acceleration.x = Math.random() * 2;
-      acceleration.y = Math.random() * 2;
+      acceleration.x = Math.random() * 1;
+      acceleration.y = Math.random() * 5;
       velocity.x += acceleration.x;
       velocity.y += acceleration.y;
-      velocity = vector.mult(vector.normalize(velocity), 100);
+      velocity = vector.mult(vector.normalize(velocity), 200);
 
       position.x += velocity.x;
       position.y += velocity.y;
@@ -48,11 +47,8 @@ module.exports = function(drawer, width, height, time) {
         velocity.y *= -1;
       }
       // const drawNew = newDraw
-      if (Math.abs(Date.now() - newDraw) > Math.random() * 50 && !this.done) {
-        newDraw = Date.now();
+      if (!this.done) {
         drawer(position.x, position.y, true);
-      } else {
-        drawer(position.x, position.y, false);
       }
     }
   };

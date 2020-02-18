@@ -1,4 +1,5 @@
 var Voronoi = require("voronoi");
+var load = require('load-asset');
 
 module.exports = (_ctx, opts) => {
   const ctx = _ctx;
@@ -25,18 +26,17 @@ module.exports = (_ctx, opts) => {
   let colorIndex = 0;
   const voronoi = new Voronoi();
   var diagram;
-  var bbox = { xl: 650, xr: ctx.canvas.width * 0.75, yt: 300, yb: ctx.canvas.height * 0.75 };
+  let addImg = false;
+  var bbox = { xl: 0, xr: ctx.canvas.width, yt: 0, yb: ctx.canvas.height };
 
   return {
-    draw(x, y, reset) {
-      if (reset) {
-        points.push({ x, y, color: colors[colorIndex] });
-        colorIndex += 1;
-        if (colorIndex >= colors.length) {
-          colorIndex = 0;
-        }
-        diagram = voronoi.compute(points, bbox);
+    draw(x, y) {
+      this.addImage();
+      if (!this.img) {
+        return;
       }
+      points.push({ x, y, color: colors[colorIndex] });
+      diagram = voronoi.compute(points, bbox);
       if (!diagram) {
         return
       }
@@ -53,13 +53,43 @@ module.exports = (_ctx, opts) => {
             v = halfedges[iHalfedge].getEndpoint();
             ctx.lineTo(v.x,v.y);
             }
-          ctx.fillStyle = points[i].color;
-          ctx.strokeStyle = config.strokeStyle;
+          // ctx.fillStyle = this.imgContext.getImageData(v.x, v.y, 1, 1);;
+          if (v.y > ctx.canvas.height * 0.99) {
+            v.y = ctx.canvas.height * 0.99;
+          }
+            const color = this.imgContext.getImageData(v.x, v.y, 1, 1).data;
+          ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
+          // ctx.strokeStyle = config.strokeStyle;
           ctx.fill();
           ctx.stroke();
         }
       }
 
+    },
+    addImage() {
+      if (!addImg) {
+        addImg = true;
+        const img = new Image();
+        img.onload = () => {
+          this.img = img;
+          this.imgCanvas = document.createElement('canvas');
+          this.imgCanvas.setAttribute('width', ctx.canvas.width);
+          this.imgCanvas.setAttribute('height', ctx.canvas.height);
+          this.imgContext = this.imgCanvas.getContext('2d');
+          this.imgContext.drawImage(
+            this.img,
+            0,
+            0,
+            this.img.width,
+            this.img.height * 0.9,
+            0,
+            0,
+            ctx.canvas.width,
+            ctx.canvas.height
+          );
+        };
+        img.src = "images/heitor3.jpg";
+      }
     },
     drawLine(fromX, fromY, x, y) {
       ctx.beginPath();
