@@ -25,7 +25,7 @@ module.exports = function(drawer, width, height, time) {
       }
 
       acceleration.x = Math.random() * 1;
-      acceleration.y = Math.random() * 5;
+      acceleration.y = Math.random() * 1;
       velocity.x += acceleration.x;
       velocity.y += acceleration.y;
       velocity = vector.mult(vector.normalize(velocity), 200);
